@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 u.firstName = "Juan";
                 u.lastName = "Peres";
                 dao.insertAll(u);
-                Toast.makeText(this, "insertado", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "insertado", Toast.LENGTH_SHORT).show();
             });
 
         });

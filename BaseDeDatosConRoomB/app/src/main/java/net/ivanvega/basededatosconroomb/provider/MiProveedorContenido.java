@@ -124,9 +124,33 @@ public class MiProveedorContenido
 
     @Nullable
     @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
+    public Uri insert(@NonNull Uri uri,
+                      @Nullable ContentValues contentValues)
+    {
+        Uri uriR=  Uri.withAppendedPath(uri, "-1");
+
+        switch (sURIMatcher.match(uri)){
+            case 1:
+                User userInsert = new User();
+                userInsert.firstName =
+                        contentValues.getAsString(UsuarioProviderContract.FIRSTNAME_COLUMN);
+                userInsert.lastName =
+                        contentValues.getAsString(UsuarioProviderContract.LASTNAME_COLUMN);
+                AppDataBase db =
+                        AppDataBase.getDataBaseInstance(getContext());
+
+                UserDao dao = db.getUserDao();
+
+                 long idNewRow =  dao.insertUser(userInsert);
+
+                 uri =
+                         Uri.withAppendedPath(uri,
+                                 String.valueOf(idNewRow));
+                break;
+        }
+        return uri;
     }
+
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {

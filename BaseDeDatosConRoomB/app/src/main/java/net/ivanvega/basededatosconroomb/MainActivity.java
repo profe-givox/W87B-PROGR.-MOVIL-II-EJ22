@@ -8,6 +8,7 @@ import android.provider.ContactsContract;
 import android.provider.UserDictionary;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import net.ivanvega.basededatosconroomb.data.AppDataBase;
 import net.ivanvega.basededatosconroomb.data.User;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 u.firstName = "Juan";
                 u.lastName = "Peres";
                 dao.insertAll(u);
+                Toast.makeText(this, "insertado", Toast.LENGTH_SHORT).show();
             });
 
         });
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
             AppDataBase.databaseWriteExecutor.execute(() -> {
                 for(User item : dao.getAll()){
-                    Log.d("TABla Usuario", item.uid + " " +  item.firstName
+                    Log.d("Usuario", item.uid + " " +  item.firstName
                             + " " + item.lastName);
                 }
             });

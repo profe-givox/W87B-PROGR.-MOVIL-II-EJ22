@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,6 +15,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        findViewById(R.id.btnQuery).setOnClickListener(
+            v -> consultarCP()
+        );
+
+        findViewById(R.id.btnInsert).setOnClickListener(
+                v -> {
+                    insertCP();
+                }
+        );
+
+    }
+
+    private void consultarCP() {
 
         Cursor c =  getContentResolver().query(
                 UsuarioProviderContract.CONTENT_URI,
@@ -24,20 +41,15 @@ public class MainActivity extends AppCompatActivity {
         if(c!=null){
             while(c.moveToNext()){
                 Log.d("providerusuario", "Usuario: "+ c.getInt(0)
-                + " - " + c.getString(1));
+                        + " - " + c.getString(1));
             }
         }else{
             Log.d("providerusuario", "Sin Usuario: ");
         }
 
-        findViewById(R.id.btnQuery).setOnClickListener(
-                v -> {
-                    insertCP();
-                }
-        );
-
     }
-    
+
+
     private void insertCP () {
 
         ContentValues cv = new ContentValues();

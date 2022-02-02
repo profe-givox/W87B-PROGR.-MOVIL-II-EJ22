@@ -20,7 +20,14 @@
         android:id="@+id/btnQuery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="insert content provider"
+        android:text="Query content provider"
+        ></Button>
+
+    <Button
+        android:id="@+id/btnInsert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Insert content provider"
         ></Button>
 
 </LinearLayout>

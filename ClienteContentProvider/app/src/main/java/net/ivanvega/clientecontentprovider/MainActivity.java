@@ -2,7 +2,9 @@ package net.ivanvega.clientecontentprovider;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -24,12 +26,29 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("providerusuario", "Usuario: "+ c.getInt(0)
                 + " - " + c.getString(1));
             }
+        }else{
+            Log.d("providerusuario", "Sin Usuario: ");
         }
+
+        findViewById(R.id.btnQuery).setOnClickListener(
+                v -> {
+                    insertCP();
+                }
+        );
 
     }
     
     private void insertCP () {
 
+        ContentValues cv = new ContentValues();
+
+        cv.put(UsuarioProviderContract.FIRSTNAME_COLUMN, "Pablo");
+        cv.put(UsuarioProviderContract.LASTNAME_COLUMN, "Secundino");
+
+        Uri uriinsert =   getContentResolver().insert(UsuarioProviderContract.CONTENT_URI,
+                cv);
+
+        Log.d("providerusuario", uriinsert.toString());
     }
     
 }

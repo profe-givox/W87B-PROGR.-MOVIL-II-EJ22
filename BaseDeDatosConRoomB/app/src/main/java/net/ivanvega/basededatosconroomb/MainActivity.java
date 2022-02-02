@@ -26,11 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
         //ContactsContract.Contacts.CONTENT_URI;
 
-        Cursor cursor = getContentResolver().query(
-                UsuarioProviderContract.CONTENT_URI,
-                UsuarioProviderContract.COLUMNS,
-                null,null,null
-        );
 
         btnIn = findViewById(R.id.btnInsert);
         btnQue = findViewById(R.id.btnQuery);

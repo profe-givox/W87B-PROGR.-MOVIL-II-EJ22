@@ -58,7 +58,7 @@ public class MiProveedorContenido
 
           switch ( sURIMatcher.match(uri)){
               case 1:
-                  AppDataBase.databaseWriteExecutor.execute(() -> {
+
                       for(User item : dao.getAll()){
                           cursor.newRow().add("uid", item.uid)
                                   .add("first_name", item.firstName)
@@ -67,7 +67,7 @@ public class MiProveedorContenido
                           Log.d("TABla Usuario", item.uid + " " +  item.firstName
                                   + " " + item.lastName);
                       }
-                  });
+
 
                   break;
 
@@ -160,5 +160,6 @@ public class MiProveedorContenido
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         return 0;
+
     }
 }

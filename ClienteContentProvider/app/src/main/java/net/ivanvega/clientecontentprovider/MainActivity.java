@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d("providerusuario", "Sin Usuario: ");
         }
 
+        updateCP();
+
     }
 
 
@@ -57,10 +59,25 @@ public class MainActivity extends AppCompatActivity {
         cv.put(UsuarioProviderContract.FIRSTNAME_COLUMN, "Pablo");
         cv.put(UsuarioProviderContract.LASTNAME_COLUMN, "Secundino");
 
-        Uri uriinsert =   getContentResolver().insert(UsuarioProviderContract.CONTENT_URI,
+        Uri uriinsert =
+                getContentResolver()
+                        .insert(UsuarioProviderContract.CONTENT_URI,
                 cv);
 
         Log.d("providerusuario", uriinsert.toString());
+    }
+
+    private void  updateCP(){
+        ContentValues cv = new ContentValues();
+        cv.put(UsuarioProviderContract.FIRSTNAME_COLUMN, "David");
+        cv.put(UsuarioProviderContract.LASTNAME_COLUMN, "Vwga");
+
+        Uri uriUpdate = Uri.withAppendedPath(UsuarioProviderContract.CONTENT_URI,
+                "4");
+
+        int filasAfectas = getContentResolver().update(uriUpdate, cv, null, null );
+
+        Log.d("providerusuario", "Filas afectadas: "+ filasAfectas);
     }
     
 }

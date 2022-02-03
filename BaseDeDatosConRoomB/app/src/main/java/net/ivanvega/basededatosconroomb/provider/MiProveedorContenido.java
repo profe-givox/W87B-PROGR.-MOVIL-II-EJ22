@@ -15,6 +15,8 @@ import net.ivanvega.basededatosconroomb.data.AppDataBase;
 import net.ivanvega.basededatosconroomb.data.User;
 import net.ivanvega.basededatosconroomb.data.UserDao;
 
+import java.util.List;
+
 public class MiProveedorContenido
         extends ContentProvider {
 
@@ -158,8 +160,45 @@ public class MiProveedorContenido
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int update(@NonNull Uri uri,
+                      @Nullable ContentValues contentValues,
+
+                      @Nullable String s, @Nullable String[] strings) {
+
+        int filasAfectadas = -1;
+
+        switch (sURIMatcher.match(uri)){
+
+            case 2:
+                int idUpdate = Integer.valueOf( uri.getLastPathSegment());
+
+                AppDataBase db =
+                        AppDataBase.getDataBaseInstance(getContext());
+
+                UserDao dao = db.getUserDao();
+
+                List<User>  lstUserUdate = dao.loadAllByIds(new int[]{idUpdate});
+
+                User userUpdate = lstUserUdate.get(0);
+
+                userUpdate.firstName =
+                        contentValues.getAsString(
+                                UsuarioProviderContract.FIRSTNAME_COLUMN);
+
+                userUpdate.lastName =
+                        contentValues.getAsString(
+                                UsuarioProviderContract.LASTNAME_COLUMN);
+
+
+                filasAfectadas = dao.updateUser(userUpdate);
+
+                break;
+        }
+
+        return filasAfectadas;
 
     }
+
+
+
 }

@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.ivanvega.mireceiverb">
 
+    <uses-permission android:name="android.permission.RECEIVE_SMS"></uses-permission>
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,7 +24,9 @@
 
         <receiver
             android:exported="true"
-            android:name=".receiver.MiBroadcastReceiverB">
+            android:name=".receiver.MiBroadcastReceiverB"
+            android:permission="android.permission.BROADCAST_SMS"
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>

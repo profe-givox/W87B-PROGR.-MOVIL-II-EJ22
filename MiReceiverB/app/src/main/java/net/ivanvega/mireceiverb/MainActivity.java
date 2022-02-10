@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.provider.Telephony;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.widget.EditText;
 
 import net.ivanvega.mireceiverb.receiver.MiBroadcastReceiverB;
 
 public class MainActivity extends AppCompatActivity {
     MiBroadcastReceiverB receiver ;
+    EditText txtMen, txtNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         receiver = new MiBroadcastReceiverB();
         registerReceiver(receiver, iFilter);
 
+        txtNum = findViewById(R.id.txtNum);
+        txtMen = findViewById(R.id.txtMen);
         findViewById(R.id.btnMenDif).setOnClickListener(
                 v -> enviarMensaje()
         );
@@ -39,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
                  SmsManager.getDefault();
 
          smsManager.sendTextMessage(
-                 "4171005555",
-                 null, "Hola Mundo!",
+                 txtNum.getText().toString(),
+                 null, txtMen.getText().toString(),
                  null,null);
 
          Intent intent =

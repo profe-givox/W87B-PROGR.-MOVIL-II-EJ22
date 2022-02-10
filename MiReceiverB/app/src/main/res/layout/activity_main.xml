@@ -16,6 +16,20 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Mensaje"
+        android:id="@+id/txtMen"></EditText>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Numero"
+        android:id="@+id/txtNum"
+
+        ></EditText>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

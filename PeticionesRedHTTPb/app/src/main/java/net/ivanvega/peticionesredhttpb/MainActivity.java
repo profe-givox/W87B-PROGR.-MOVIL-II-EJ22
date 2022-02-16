@@ -3,16 +3,19 @@ package net.ivanvega.peticionesredhttpb;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DownloadManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -29,12 +32,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     TextView txt;
     RequestQueue queue;
+    ImageView imgview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         txt = findViewById(R.id.txtString);
+        imgview = findViewById(R.id.imgFoto);
 
         queue = Volley.newRequestQueue(this);
 
@@ -45,6 +50,37 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnJsonReq).setOnClickListener(
                 v -> jsonRequest()
         );
+
+        findViewById(R.id.btnImageReq).setOnClickListener(
+                v -> imageRequestMethd()
+        );
+    }
+
+    private void imageRequestMethd() {
+
+        ImageRequest imageRequest = new ImageRequest(
+                "url",
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        imgview.setImageBitmap(response);
+                    }
+                },
+                300, 300,
+                ImageView.ScaleType.CENTER,
+                Bitmap.Config.ALPHA_8,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+
+        );
+
+        MySingleton.getInstance(this).
+                addToRequestQueue(imageRequest);
+
     }
 
     private void jsonRequest() {

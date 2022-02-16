@@ -30,4 +30,17 @@
         android:layout_height="wrap_content"
         android:text="Json Request"></Button>
 
+    <Button
+        android:id="@+id/btnImageReq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Image Request"></Button>
+
+    <ImageView
+        android:id="@+id/imgFoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:srcCompat="@tools:sample/avatars" />
+
+
 </LinearLayout>

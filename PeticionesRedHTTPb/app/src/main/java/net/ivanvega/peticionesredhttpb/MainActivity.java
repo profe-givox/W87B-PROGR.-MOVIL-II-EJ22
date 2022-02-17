@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private void imageRequestMethd() {
 
         ImageRequest imageRequest = new ImageRequest(
-                "https://developer.android.com/courses/images/android-for-developers.svg?hl=es-419",
+                "https://www.xda-developers.com/files/2018/03/android-development.png",
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {

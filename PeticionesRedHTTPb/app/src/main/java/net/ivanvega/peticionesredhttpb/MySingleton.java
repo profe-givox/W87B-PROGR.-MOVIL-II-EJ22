@@ -59,4 +59,4 @@ public class MySingleton {
         public ImageLoader getImageLoader() {
             return imageLoader;
         }
-    }
+    }   

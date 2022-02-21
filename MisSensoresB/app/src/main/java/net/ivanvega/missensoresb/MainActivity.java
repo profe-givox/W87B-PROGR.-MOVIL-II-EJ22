@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private Sensor sensorLuz;
 
     TextView txtLuz, txtProximidad;
+    private Sensor sensorProxi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         txtLuz = findViewById(R.id.txtLuz);
-
+        txtProximidad = findViewById(R.id.txtProximidad);
          sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
          List<Sensor> lsSensores =
@@ -36,16 +37,30 @@ public class MainActivity extends AppCompatActivity {
              Log.d("XENSOR", sensor.toString());
          }
 
-         sensorLuz =
-                 sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+         sensorLuz =                 sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+         sensorProxi =                 sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
     }
 
     SensorEventListener sensorEventListenerLuz = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            String mes = "Sendor de luz: " + sensorEvent.values[0];
-            txtLuz.setText(mes);
+
+            switch (sensorEvent.sensor.getType()){
+                case Sensor.TYPE_LIGHT:
+                    String mes = "Sendor de luz: " + sensorEvent.values[0];
+                    txtLuz.setText(mes);
+                    break;
+                case Sensor.TYPE_PROXIMITY:
+                    String pro = "Sendor de proximidad: " + sensorEvent.values[0];
+                    txtProximidad.setText(pro);
+                    break;
+
+            }
+
+
+
+
         }
 
         @Override
@@ -62,11 +77,17 @@ public class MainActivity extends AppCompatActivity {
                     sensorLuz,
                     SensorManager.SENSOR_DELAY_NORMAL);
         }
+        if(sensorProxi!=null ){
+            sensorManager.registerListener(sensorEventListenerLuz,
+                    sensorProxi,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(sensorEventListenerLuz);
+
     }
 }

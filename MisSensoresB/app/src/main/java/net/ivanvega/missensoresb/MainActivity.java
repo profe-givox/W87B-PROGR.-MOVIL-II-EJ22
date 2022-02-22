@@ -13,13 +13,27 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity
+        extends AppCompatActivity
+        implements SensorEventListener {
 
     private SensorManager sensorManager;
     private Sensor sensorLuz;
 
-    TextView txtLuz, txtProximidad;
+    TextView txtLuz, txtProximidad, txtOrientacion;
     private Sensor sensorProxi;
+
+    Sensor sensorAcelerometro,
+            sensorCampoMagetico;
+
+    private final float[] accelerometerReading = new float[3];
+    private final float[] magnetometerReading = new float[3];
+
+    private final float[] rotationMatrix = new float[9];
+    private final float[] orientationAngles = new float[3];
+    private boolean mLastAccelerometerSet=false;
+    private boolean mLastMagnetometerSet=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +51,10 @@ public class MainActivity extends AppCompatActivity {
              Log.d("XENSOR", sensor.toString());
          }
 
-         sensorLuz =                 sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-         sensorProxi =                 sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+         sensorLuz = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+         sensorProxi = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+         sensorAcelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+         sensorCampoMagetico = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
     }
 
@@ -57,10 +73,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
             }
-
-
-
-
         }
 
         @Override
@@ -82,12 +94,54 @@ public class MainActivity extends AppCompatActivity {
                     sensorProxi,
                     SensorManager.SENSOR_DELAY_NORMAL);
         }
+
+        if(sensorAcelerometro!=null){
+            sensorManager.registerListener(this, sensorAcelerometro,
+                    SensorManager.SENSOR_DELAY_UI);
+        }
+
+        if(sensorCampoMagetico!=null){
+            sensorManager.registerListener(this, sensorCampoMagetico,
+                    SensorManager.SENSOR_DELAY_UI);
+        }
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(sensorEventListenerLuz);
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        switch (sensorEvent.sensor.getType()){
+            case Sensor.TYPE_ACCELEROMETER:
+                System.arraycopy(sensorEvent.values, 0, accelerometerReading,
+                        0, accelerometerReading.length );
+                mLastAccelerometerSet = true;
+                break;
+
+            case Sensor.TYPE_MAGNETIC_FIELD:
+                System.arraycopy(sensorEvent.values, 0, magnetometerReading,
+                        0, magnetometerReading.length );
+                mLastMagnetometerSet = true;
+                break;
+        }
+
+        if(mLastAccelerometerSet && mLastMagnetometerSet){
+            updateOrientationAngles();
+        }
+
+    }
+
+    private void updateOrientationAngles() {
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
 }

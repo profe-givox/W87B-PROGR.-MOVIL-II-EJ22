@@ -42,6 +42,7 @@ public class MainActivity
 
         txtLuz = findViewById(R.id.txtLuz);
         txtProximidad = findViewById(R.id.txtProximidad);
+        txtOrientacion = findViewById(R.id.txtPosicion);
          sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
          List<Sensor> lsSensores =
@@ -137,6 +138,16 @@ public class MainActivity
     }
 
     private void updateOrientationAngles() {
+        SensorManager.getRotationMatrix(rotationMatrix, null,
+                accelerometerReading, magnetometerReading);
+
+        SensorManager.getOrientation(rotationMatrix, orientationAngles);
+
+              float azzimuthRadians =  orientationAngles[0];
+
+              float azimuthDegree = (float) (Math.toDegrees(azzimuthRadians)+360)%360;
+
+              txtOrientacion.setText("Orientacion angulo: " + azimuthDegree);
 
     }
 

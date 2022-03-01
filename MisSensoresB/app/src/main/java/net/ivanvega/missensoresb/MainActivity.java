@@ -3,12 +3,18 @@ package net.ivanvega.missensoresb;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.List;
@@ -34,11 +40,22 @@ public class MainActivity
     private boolean mLastAccelerometerSet=false;
     private boolean mLastMagnetometerSet=false;
 
+    float xPos, Ypos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+       MiViewCanchaPelota miViewCanchaPelota = new
+               MiViewCanchaPelota(this);
+        setContentView(miViewCanchaPelota);
+
+
+        Display display =
+                getWindowManager().getDefaultDisplay();
+
+        
 
         txtLuz = findViewById(R.id.txtLuz);
         txtProximidad = findViewById(R.id.txtProximidad);
@@ -122,6 +139,13 @@ public class MainActivity
                 System.arraycopy(sensorEvent.values, 0, accelerometerReading,
                         0, accelerometerReading.length );
                 mLastAccelerometerSet = true;
+
+
+                 float  xAcc=sensorEvent.values[0];
+                 float  yAcc=sensorEvent.values[1];
+
+                updatePOsicion();
+
                 break;
 
             case Sensor.TYPE_MAGNETIC_FIELD:
@@ -137,6 +161,10 @@ public class MainActivity
 
     }
 
+    private void updatePOsicion() {
+
+    }
+
     private void updateOrientationAngles() {
         SensorManager.getRotationMatrix(rotationMatrix, null,
                 accelerometerReading, magnetometerReading);
@@ -149,6 +177,30 @@ public class MainActivity
 
               txtOrientacion.setText("Orientacion angulo: " + azimuthDegree);
 
+    }
+
+    class MiViewCanchaPelota extends View {
+
+
+        Paint lapiz = new Paint();
+
+        public MiViewCanchaPelota(Context context) {
+            super(context);
+
+
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+
+            lapiz.setColor(Color.BLACK);
+
+            canvas.drawLine(200,200,
+                    400,400, lapiz);
+
+            invalidate();
+        }
     }
 
     @Override

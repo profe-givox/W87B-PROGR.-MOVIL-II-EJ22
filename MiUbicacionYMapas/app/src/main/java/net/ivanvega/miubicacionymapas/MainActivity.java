@@ -13,11 +13,14 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +29,7 @@ import com.google.android.gms.tasks.OnTokenCanceledListener;
 public class MainActivity extends AppCompatActivity {
 
     private FusedLocationProviderClient fusedLocationClient;
+    private LocationRequest locationRequest;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -52,8 +56,51 @@ public class MainActivity extends AppCompatActivity {
             solicitarPermiso();
         } else {
             ultimaUbicacionConcedida();
+            startLocationUpdates();
         }
     }
+
+    private void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    // Update UI with location data
+                    // ...
+                    location.getBearingAccuracyDegrees()
+                    String locationSTR = "\n" + location.getLatitude() + ", " + location.getLongitude();
+                    Log.d("UBIX2", locationSTR);
+                    Toast.makeText(getApplicationContext(), locationSTR, Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        };
+
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+                locationCallback,
+                Looper.getMainLooper());
+    }
+
+    LocationCallback locationCallback;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void solicitarPermiso() {

@@ -15,12 +15,15 @@ import org.osmdroid.views.overlay.Polyline;
 import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
@@ -28,7 +31,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     MapView map = null;
-
+    private RequestQueue queue;
+    private JsonObjectRequest requestMapRequest;
 
 
     @Override
@@ -61,31 +65,53 @@ public class MainActivity extends AppCompatActivity {
 
         dibujarPolilinea();
 
+
     }
 
     private void obtenerRouteFromMapRequest(){
-        RequestQueue queue =
+         queue =
                 Volley.newRequestQueue(this);
 
-        JsonObjectRequest requestMapRequest =
+//        StringRequest request = new StringRequest(
+//                "http://www.mapquestapi.com/directions/v2/route?key=MI-KEY&from=20.14649016556056,-101.17566401392817&to=20.126496094732943,-101.19317063853653",
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        Log.d("GIVO", "se ejecuto");
+//
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.d("GIVO", "se ejecuto con errror");
+//                    }
+//                }
+//        );
+
+         requestMapRequest =
                 new JsonObjectRequest(
                         "http://www.mapquestapi.com/directions/v2/route?key=rHGSMo2PbPzaZi281CA44gjIYcqOpJ6m&from=20.14649016556056,-101.17566401392817&to=20.126496094732943,-101.19317063853653",
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
+                                Log.d("GIVO", "se ejecuto");
                                 try {
                                     JSONArray   indicaiones =  response.getJSONObject("route")
-                                            .getJSONObject("legs")
-                                            .getJSONArray("maneuvers");
+                                            .getJSONArray("legs")
+                                            .getJSONObject(0).
+                                                    getJSONArray("maneuvers");
 
 
 
                                     for( int i =0 ;  i <indicaiones.length(); i++){
                                         JSONObject indi = indicaiones.getJSONObject(i);
-                                        indi.getJSONObject("startPoint").get("lat");
-                                        indi.getJSONObject("startPoint").get("lng");
+                                        String strlatlog = indi.getJSONObject("startPoint").get("lat").toString()
+                                                + "," +
+                                        indi.getJSONObject("startPoint").get("lng").toString();
 
-                                        
+                                        Log.d("GIVO", "se ejecuto: " +  strlatlog );
+
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -95,10 +121,13 @@ public class MainActivity extends AppCompatActivity {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                Log.d("GIVO", "se ejecuto CON ERROR");
 
                             }
                         }
                 );
+
+        queue.add(requestMapRequest);
     }
 
     private void dibujarPolilinea() {
@@ -136,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         map.onResume(); //needed for compass, my location overlays, v6.0.0 and up
+        obtenerRouteFromMapRequest();
     }
 
     public void onPause(){

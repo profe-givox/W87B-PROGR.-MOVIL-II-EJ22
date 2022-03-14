@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
          requestMapRequest =
                 new JsonObjectRequest(
-                        "http://www.mapquestapi.com/directions/v2/route?key=rHGSMo2PbPzaZi281CA44gjIYcqOpJ6m&from=20.14649016556056,-101.17566401392817&to=20.126496094732943,-101.19317063853653",
+                        "http://www.mapquestapi.com/directions/v2/route?key=MIKEY&from=20.14649016556056,-101.17566401392817&to=20.126496094732943,-101.19317063853653",
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
